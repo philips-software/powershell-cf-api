@@ -1,0 +1,33 @@
+{
+    "name": "test-integration-12938472947",
+    "roles": {
+        "developers": [
+            "mlindell", "aloafoe"
+        ],
+        "managers": [
+            "mlindell"
+        ],
+        "auditors": [
+            "mlindell"
+        ]
+    },
+    "services": [
+        {
+            "name": "myvault",
+            "service": "hsdp-vault",
+            "plan": "vault-us-east-1"
+        }
+    ],
+    "userservices": [
+        {
+            "name": "logproxy",
+            "logproxy_url": "https://logproxy.test.cloud.pcftest.com/syslog/drain/1234"
+        },
+        {
+            "name": "eureka-service",
+            "params":{
+                "uri": "https://service-discovery-test.cloud.pcftest.com"
+            }            
+        }
+    ]
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>cf-api</id>
+    <version>${NUGET_VERSION}</version>
+    <authors>Mark Lindell</authors>
+    <owners>Mark Lindell</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>CloudFoundry methods for managing spaces</description>
+    <releaseNotes>Initial release.</releaseNotes>
+    <copyright>Copyright 2019</copyright>
+    <dependencies>
+    </dependencies>
+  </metadata>
+</package>
