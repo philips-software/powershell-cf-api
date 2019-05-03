@@ -9,6 +9,8 @@
     This parameter is used to identify the username to authenticate
 .PARAMETER Password
     This parameter is used to identify the username's password to authenticate
+.PARAMETER CloudFoundryAPI
+    This parameter is the cloud foundry api endpoint to use
 .EXAMPLE
    $token = Get-Token "Wellcentive" "bjones" "SD*&@#@kdfj$"
 #>
@@ -27,9 +29,10 @@ function Get-Token {
         [String]
         $Password,
 
-        [Parameter()]
+        [Parameter( Position = 2, Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [String]
-        $CloudFoundryAPI = "https://api.cloud.pcftest.com"
+        $CloudFoundryAPI
     )
 
     begin {

@@ -10,7 +10,7 @@
 .PARAMETER Password
     This parameter is used to identify the username's password to authenticate
 .PARAMETER CloudFoundryAPI
-    This parameter the CloudFoundry URL to use. Defaults to "https://api.cloud.pcftest.com"
+    This parameter the CloudFoundry URL to use.
 .EXAMPLE
    $org = Get-OrgCredentials "Wellcentive" "bjones" "SD*&@#@kdfj$"
 #>
@@ -35,9 +35,10 @@ function Get-OrgCredentials {
         [String]
         $Password,
 
-        [Parameter()]
+        [Parameter( Position = 3, Mandatory)]
+        [ValidateNotNullOrEmpty()]
         [String]
-        $CloudFoundryAPI = "https://api.cloud.pcftest.com"
+        $CloudFoundryAPI
     )
 
     begin {
