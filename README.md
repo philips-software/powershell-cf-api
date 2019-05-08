@@ -165,25 +165,3 @@ Link to LICENSE.md
 
 1. Inspiration for powershell approach taken from from [JiraPS](https://github.com/AtlassianPS/JiraPS)
 2. Terraform is the prefered approach but the leading [Terraform CloudFoundy provider](https://github.com/mevansam/terraform-provider-cf) is not mature enough to use.
-
-# cf-api - A powershell module for CloudFoundry space managment
-
-This powershell module can deploy, manage, and teardown CloudFoundry spaces via a json file definition.  This was implemented using the CloudFoundry APIs as an alternative to the CLI.
-
-The module is far from a complete replacement for the CF CLI but does provide a few distinct advantages:
-
-1. Create an entire space definition in a single command from a definition (e.g. manifest)
-2. Will wait for commands to complete so it is compatible with CI/CD pipelines for environments on demand.
-3. Can tear down the space to support environments on demand and cost savings.
-
-The module must be imported into powershell using:
-
-```
-Import-Module cf-api.psm1 -Scope Local
-```
-
-
-Terraform is the prefered approach but the leading [Terraform CloudFoundy provider](https://github.com/mevansam/terraform-provider-cf) is not mature enough to use.
-
-
-
