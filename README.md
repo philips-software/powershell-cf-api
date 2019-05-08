@@ -1,5 +1,7 @@
 # powershell-cf-api
 
+[![Slack](https://philips-software-slackin.now.sh/badge.svg)](https://philips-software-slackin.now.sh)
+
 **Description**:  This PowerShell module can deploy and teardown CloudFoundry spaces and services via a json definition file. It is very similar to the manifest concept supported by the CLI wrt to applications.  This was implemented using the CloudFoundry APIs as an alternative to the Cloud Foundry command line interface (CLI). The powershell module can be used to create automated deployment scripts that perform work asyncrhonously. The cmdlets support waiting for service operations to complete making it useful for automated deployment and operational scripts.
 
 The module is not intended to be a replacement for the CF CLI but does provide a few distinct advantages:
@@ -165,3 +167,5 @@ Link to LICENSE.md
 
 1. Inspiration for powershell approach taken from from [JiraPS](https://github.com/AtlassianPS/JiraPS)
 2. Terraform is the prefered approach but the leading [Terraform CloudFoundy provider](https://github.com/mevansam/terraform-provider-cf) is not mature enough to use.
+
+[![Slack](https://philips-software-slackin.now.sh/badge.svg)](https://philips-software-slackin.now.sh)
