@@ -133,7 +133,7 @@ Example of definition file:
 ### Using a json the definition file
 
 ```
-$org = Get-OrgCredentials -OrgName "myorg" -Username "myusername" -Password "mypassword"
+$org = Get-OrgCredentials -OrgName "myorg" -Username "myusername" -Password "mypassword" -CloudFoundryAPI https://api.cloud.pcftest.com
 $def = Get-Content -Path space-definition.json" | ConvertFrom-Json
 # publish the space
 $space = Publish-Space -Org $org -Definition $def
