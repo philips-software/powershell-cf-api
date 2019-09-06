@@ -20,8 +20,13 @@ jobs:
   steps:
   - template: semver-set-env.yml@templates
   - powershell: |
-      $v = "$($env:GITVERSION_SEMVER)-alpha-$($env:GITVERSION_BUILDMETADATA)"
+      $v = "$($env:GITVERSION_SEMVER)"
       "##vso[task.setvariable variable=NUGET_VERSION;]$v"
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  - powershell: |
+      $v = "$($env:GITVERSION_SEMVER)-$($env:GITVERSION_BRANCHNAME)-$($env:GITVERSION_BUILDMETADATA)"
+      "##vso[task.setvariable variable=NUGET_VERSION;]$v"
+    condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
   - powershell: 'gci env:'
   - task: MarkLindell.h2hextension.envsubst.envsubst@1
     displayName: 'fix versions in files'
