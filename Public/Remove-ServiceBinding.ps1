@@ -23,7 +23,9 @@ function Remove-ServiceBinding {
         $base = Get-BaseHost
         $url = "$($base)/v2/service_bindings/$($ServiceBinding.metadata.guid)?accepts_incomplete=true"
         $header = Get-Header
-        $response = (Invoke-WebRequest -Uri $url -Method Delete -Header $header)
+        $response = Invoke-Retry -ScriptBlock {
+            Write-Output (Invoke-WebRequest -Uri $url -Method Delete -Header $header)
+        }        
         Write-Debug $response
         if ($response.StatusCode -ne 204) {
             $message = "Remove-ServiceBinding: $($url) $($response.StatusCode)"

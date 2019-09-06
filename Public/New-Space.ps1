@@ -42,7 +42,9 @@ function New-Space {
         $url = "$($base)/v2/spaces"
         
         $header = Get-Header
-        $response = (Invoke-WebRequest -Uri $url -Method Post -Header $header -Body $bodyJson)
+        $response = Invoke-Retry -ScriptBlock {
+            Write-Output (Invoke-WebRequest -Uri $url -Method Post -Header $header -Body $bodyJson)
+        }        
         Write-Debug $response
         if ($response.StatusCode -ne 201) {
             $message = "New-Space: $($url) $($response.StatusCode)"

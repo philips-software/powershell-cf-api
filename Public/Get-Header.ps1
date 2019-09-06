@@ -45,7 +45,9 @@ function Get-Header {
                 "Accept"="application/json"
                 "Content-Type"="application/x-www-form-urlencoded; charset=UTF-8"
             }
-            $response = (Invoke-WebRequest -uri $url -Method Post -Header $refreshHeader -Body $body )
+            $response = Invoke-Retry -ScriptBlock {
+                Write-Output (Invoke-WebRequest -uri $url -Method Post -Header $refreshHeader -Body $body )
+            }            
             Write-Debug $response
             if ($response.StatusCode -ne 200) {
                 $message = "$($url) $($response.StatusCode)"

@@ -29,7 +29,9 @@ function Remove-Space {
         $base = Get-BaseHost
         $url = "$($base)/v2/spaces/$($Space.metadata.guid)?async=true&recursive=true"
         $header = Get-Header
-        $response = (Invoke-WebRequest -Uri $url -Method Delete -Header $header)
+        $response = Invoke-Retry -ScriptBlock {
+            Write-Output (Invoke-WebRequest -Uri $url -Method Delete -Header $header)
+        }        
         Write-Debug $response
         if ($response.StatusCode -ne 202) {
             $message = "Remove-Space: $($url) $($response.StatusCode)"

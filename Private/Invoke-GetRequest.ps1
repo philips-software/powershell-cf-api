@@ -27,7 +27,9 @@ function Invoke-GetRequest {
         $base = Get-BaseHost
         $url = "$($base)$($path)"
         $header = Get-Header
-        $response = (Invoke-WebRequest -uri $url -Method Get -Header $header)
+        $response = Invoke-Retry -ScriptBlock {
+            Write-Output (Invoke-WebRequest -uri $url -Method Get -Header $header)
+        }
         Write-Debug $response | ConvertTo-Json -Depth 20
         if ($response.StatusCode -ne 200) {
             $message = "$($function): $($url) $($response.StatusCode) expected 200"

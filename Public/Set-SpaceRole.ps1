@@ -43,7 +43,9 @@ function Set-SpaceRole {
         $url = "$($base)$($path)"
         $body = @{"username" = $Username }
         $header = Get-Header
-        $response = (Invoke-WebRequest -Uri $url -Method 'Put' -Header $header -Body ($body | ConvertTo-Json))
+        $response = Invoke-Retry -ScriptBlock {
+            Write-Output (Invoke-WebRequest -Uri $url -Method 'Put' -Header $header -Body ($body | ConvertTo-Json))
+        }
         Write-Debug $response
         if ($response.StatusCode -ne 201) {
             $message = "Set-SpaceRole: $($url) $($response.StatusCode)"
