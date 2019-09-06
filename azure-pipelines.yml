@@ -22,11 +22,6 @@ jobs:
   - powershell: |
       $v = "$($env:GITVERSION_SEMVER)"
       "##vso[task.setvariable variable=NUGET_VERSION;]$v"
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-  - powershell: |
-      $v = "$($env:GITVERSION_SEMVER)-$($env:GITVERSION_BRANCHNAME)-$($env:GITVERSION_BUILDMETADATA)"
-      "##vso[task.setvariable variable=NUGET_VERSION;]$v"
-    condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
   - powershell: 'gci env:'
   - task: MarkLindell.h2hextension.envsubst.envsubst@1
     displayName: 'fix versions in files'
@@ -44,3 +39,4 @@ jobs:
     inputs:
       command: push
       publishVstsFeed: 'e34d41e4-409d-4d02-ac17-deb3eea94241'
+    condition: (and(succeeded(), eq(variables['GITVERSION_BuildMetaData'], '')))
