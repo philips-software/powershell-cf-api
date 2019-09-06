@@ -66,7 +66,10 @@ function New-Service {
             "space_guid" = $Space.metadata.guid
         } 
         $header = Get-Header
-        $response = (Invoke-WebRequest -Uri $url -Method Post -Header $header -Body ($body | ConvertTo-Json))
+        $response = Invoke-Retry -ScriptBlock {
+            Write-Output (Invoke-WebRequest -Uri $url -Method Post -Header $header -Body ($body | ConvertTo-Json))
+        }
+        
         Write-Debug $response
         if (($response.StatusCode -ne 202) -and ($response.StatusCode -ne 201)) {
             $message = "New-Service: $($url) $($response.StatusCode)"

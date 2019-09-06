@@ -57,7 +57,6 @@ function Publish-Space {
             } 
         }
         Wait-ServiceOperations -Space $space | out-null
-        Write-Information "2"
         Write-Information "published space $($Definition.name)"
     }
 

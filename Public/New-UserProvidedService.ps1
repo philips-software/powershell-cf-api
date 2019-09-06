@@ -58,7 +58,10 @@ function New-UserProvidedService {
             "syslog_drain_url"=$SyslogDrainUrl
         }
         $header = Get-Header
-        $response = (Invoke-WebRequest -Uri $url -Method Post -Header $header -Body ($body | ConvertTo-Json))
+        $response = Invoke-Retry -ScriptBlock {
+            Write-Output (Invoke-WebRequest -Uri $url -Method Post -Header $header -Body ($body | ConvertTo-Json))
+        }        
+
         Write-Debug $response
         if ($response.StatusCode -ne 201) {
             $message = "New-UserProvidedService: $($url) $($response.StatusCode)"

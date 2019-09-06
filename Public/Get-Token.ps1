@@ -52,7 +52,9 @@ function Get-Token {
             "Accept"="application/json"
             "Content-Type"="application/x-www-form-urlencoded; charset=UTF-8"
         }
-        $response = Invoke-WebRequest -uri $url -Method Get -Header $headers
+        $response = Invoke-Retry -ScriptBlock {
+            Write-Output (Invoke-WebRequest -uri $url -Method Get -Header $headers)
+        }       
         if ($response.StatusCode -ne 200) {
             $message = "$($url) $($response.StatusCode)"
             Write-Error $message
@@ -61,7 +63,9 @@ function Get-Token {
         $url = ($response | ConvertFrom-Json).authorization_endpoint + "/oauth/token"
         Set-Variable -Name oAuthTokenEndpoint -Scope Script -Value $url
         $body = "grant_type=password&password=$($Password)&scope=&username=$($Username)"
-        $response = (Invoke-WebRequest -uri $url -Method Post -Header $headers -Body $body)
+        $response = Invoke-Retry -ScriptBlock {
+            Write-Output (Invoke-WebRequest -uri $url -Method Post -Header $headers -Body $body)
+        }        
         Write-Debug $response
 
         if ($response.StatusCode -ne 200) {

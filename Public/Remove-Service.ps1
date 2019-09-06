@@ -23,8 +23,10 @@ function Remove-Service {
         $base = Get-BaseHost
         $url = "$($base)/v2/service_instances/$($Guid)?accepts_incomplete=true&async=true"
         $header = Get-Header
-        $response = (Invoke-WebRequest -Uri $url -Method Delete -Header $header)
-        Write-Debug $response
+        $response = Invoke-Retry -ScriptBlock {
+            Write-Output (Invoke-WebRequest -Uri $url -Method Delete -Header $header)
+        }
+        Write-Debug $response        
         if (($response.StatusCode -ne 204) -and ($response.StatusCode -ne 202)) {
             $message = "Remove-Service: $($url) $($response.StatusCode)"
             Write-Error -Message $message

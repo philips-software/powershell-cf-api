@@ -21,7 +21,7 @@ function Wait-ServiceOperations {
         
         [Parameter()]
         [Int]
-        $Seconds = 3,
+        $Seconds = 10,
 
         [Parameter()]
         [Int]
@@ -38,7 +38,7 @@ function Wait-ServiceOperations {
         $startDate = Get-Date
         do {
             $summary = Get-SpaceSummary -Space $Space
-            if (@($summary.services | Where-Object {[Bool]($_.PsObject.Properties.name -match "service_plan")} | Where-Object { $_.last_operation.state -ne 'succeeded' }).count -eq 0) {
+            if (@($summary.services | Where-Object {[Bool]($_.PsObject.Properties.name -match "service_plan")} | Where-Object { $_.last_operation.state -eq 'in progress' }).count -eq 0) {
                 Write-Verbose "Wait-ServiceOperations: complete"
                 return $summary
             }
