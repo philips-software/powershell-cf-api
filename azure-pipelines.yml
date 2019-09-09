@@ -15,18 +15,14 @@ jobs:
   displayName: nuget deploy
   dependsOn:
   - semver
-  pool:
-    vmImage: 'ubuntu-16.04'
-  steps:
+
+steps:
 
   - template: semver-set-env.yml@templates
 
   - powershell: |
       $bm = (gci env:GITVERSION_BuildMetaData).value
       Write-Host "##vso[task.setvariable variable=gitversion.buildmetadata;]$bm"
-    env:
-      version: ${{ parameters.version }}
-      sonarScan: ${{ parameters.sonarScan }}
     displayName: set params from env
 
   - powershell: |
