@@ -45,16 +45,9 @@ jobs:
       packagesToPack: '*.nuspec'
     displayName: 'Nuget pack'
 
-  - task: NuGetAuthenticate@0
-    displayName: 'NuGet Authenticate'
-    inputs:
-      nuGetServiceConnections: nuget.org
-    condition: and(succeeded(), ne(variables['GITVERSION_BuildMetaData'], '0'))
-
   - task: NuGetCommand@2
     inputs:
       command: push
-      publishVstsFeed: 'e34d41e4-409d-4d02-ac17-deb3eea94241'
       nuGetFeedType: external
       publishFeedCredentials: nuget.org
     condition: and(succeeded(), ne(variables['GITVERSION_BuildMetaData'], '0'))
