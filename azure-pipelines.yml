@@ -21,19 +21,14 @@ jobs:
   - template: semver-set-env.yml@templates
 
   - powershell: |
-      $bm = (gci env:GITVERSION_BuildMetaData).value
-      Write-Host "##vso[task.setvariable variable=gitversion.buildmetadata;]$bm"
-    displayName: set params from env
-
-  - powershell: |
       $v = "$($env:GITVERSION_SEMVER)-alpha-$($env:GITVERSION_BUILDMETADATA)"
       "##vso[task.setvariable variable=NUGET_VERSION;]$v"
-    condition: and(succeeded(), ne(variables['gitversion.buildmetadata'], ''))
+    condition: and(succeeded(), ne(variables['GITVERSION_BuildMetaData'], '0'))
  
   - powershell: |
       $v = "$($env:GITVERSION_SEMVER)"
       "##vso[task.setvariable variable=NUGET_VERSION;]$v"
-    condition: and(succeeded(), eq(variables['gitversion.buildmetadata'], ''))
+    condition: and(succeeded(), eq(variables['GITVERSION_BuildMetaData'], '0'))
 
   - task: MarkLindell.h2hextension.envsubst.envsubst@1
     displayName: 'fix versions in files'
@@ -53,4 +48,4 @@ jobs:
     inputs:
       command: push
       publishVstsFeed: 'e34d41e4-409d-4d02-ac17-deb3eea94241'
-    condition: and(succeeded(), ne(variables['gitversion.buildmetadata'], ''))
+    condition: and(succeeded(), ne(variables['GITVERSION_BuildMetaData'], '0'))
