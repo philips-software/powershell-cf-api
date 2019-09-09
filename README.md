@@ -21,8 +21,11 @@ The module is not intended to be a replacement for the CF CLI but does provide a
 
 ## Installation
 
+This package is available on [nuget.org](https://www.nuget.org/packages/cf-api)
+
 ```
-Import-Module cf-api.psm1 -Scope Local
+nuget install cf-api -Version {version}
+Import-Module cf-api-{version}/cf-api.psm1 -Scope Local
 ```
 ## Configuration
 
