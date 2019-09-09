@@ -16,7 +16,7 @@ jobs:
   dependsOn:
   - semver
 
-steps:
+  steps:
 
   - template: semver-set-env.yml@templates
 
