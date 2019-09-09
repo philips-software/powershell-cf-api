@@ -18,25 +18,43 @@ jobs:
   pool:
     vmImage: 'ubuntu-16.04'
   steps:
+
   - template: semver-set-env.yml@templates
+
+  - powershell: |
+      $bm = (gci env:GITVERSION_BuildMetaData).value
+      Write-Host "##vso[task.setvariable variable=gitversion.buildmetadata;]$bm"
+    env:
+      version: ${{ parameters.version }}
+      sonarScan: ${{ parameters.sonarScan }}
+    displayName: set params from env
+
+  - powershell: |
+      $v = "$($env:GITVERSION_SEMVER)-alpha-$($env:GITVERSION_BUILDMETADATA)"
+      "##vso[task.setvariable variable=NUGET_VERSION;]$v"
+    condition: and(succeeded(), ne(variables['gitversion.buildmetadata'], ''))
+ 
   - powershell: |
       $v = "$($env:GITVERSION_SEMVER)"
       "##vso[task.setvariable variable=NUGET_VERSION;]$v"
-  - powershell: 'gci env:'
+    condition: and(succeeded(), eq(variables['gitversion.buildmetadata'], ''))
+
   - task: MarkLindell.h2hextension.envsubst.envsubst@1
     displayName: 'fix versions in files'
     inputs:
       Contents: |
         *.nuspec
         *.psd1
+
   - task: NuGetCommand@2
     displayName: 'Nuget pack'
     inputs:
       command: pack
       packagesToPack: '*.nuspec'
+
   - task: NuGetCommand@2
     displayName: 'NuGet push'
     inputs:
       command: push
       publishVstsFeed: 'e34d41e4-409d-4d02-ac17-deb3eea94241'
-    condition: (and(succeeded(), eq(variables['GITVERSION_BuildMetaData'], '')))
+    condition: and(succeeded(), ne(variables['gitversion.buildmetadata'], ''))
