@@ -57,6 +57,7 @@ Unpublish-Space
 # Spaces
 Get-Space
 Get-SpaceSummary
+Get-Env
 New-Space
 Remove-Space
 Wait-RemoveSpace
