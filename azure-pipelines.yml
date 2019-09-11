@@ -5,10 +5,6 @@ resources:
     name: azure-pipeline-templates
     ref: refs/heads/master
 
-trigger:
-  branches:
-    include: [ master ]
-
 pool:
   vmImage: 'windows-2019'
 
