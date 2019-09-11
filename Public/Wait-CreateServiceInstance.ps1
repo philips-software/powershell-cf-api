@@ -33,7 +33,11 @@ function Wait-CreateServiceInstance {
 
         [Parameter(Mandatory)]
         [String]
-        $Name
+        $Name,
+
+        [Parameter()]
+        [Int]
+        $Timeout = 15
     )
 
     begin {
@@ -44,7 +48,7 @@ function Wait-CreateServiceInstance {
         Write-Debug "[$($MyInvocation.MyCommand.Name)] PSBoundParameters: $($PSBoundParameters | Out-String)"
 
         $serviceinstance = New-ServiceAsync -Space $space -ServiceName $servicename -Plan $plan -Name $name
-        Wait-CreateService -Space $space -ServiceInstance $serviceinstance
+        Wait-CreateService -Space $space -ServiceInstance $serviceinstance -Timeout $Timeout
         Write-Output $serviceinstance
     }
 
