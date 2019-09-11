@@ -9,15 +9,14 @@ trigger:
   branches:
     include: [ master ]
 
-pool:
-  vmImage: 'windows-2019'
-
 jobs:
 - template: job-templates/semver.yml@templates
 - job: deploy
   displayName: nuget deploy
   dependsOn:
   - semver
+  pool:
+    vmImage: windows-latest
 
   steps:
 
