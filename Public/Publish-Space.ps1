@@ -21,7 +21,11 @@ function Publish-Space {
         [Parameter(Mandatory, Position = 1)]
         [ValidateNotNullOrEmpty()]
         [psobject]
-        $Definition
+        $Definition,
+
+        [Parameter()]
+        [Int]
+        $Timeout = 60
     )
 
     begin {
@@ -56,7 +60,7 @@ function Publish-Space {
                 Write-Information "Publish-Space: userservice '$($s.name)' exists, skipping"
             } 
         }
-        Wait-ServiceOperations -Space $space | out-null
+        Wait-ServiceOperations -Space $space -Timeout $Timeout | out-null
         Write-Information "published space $($Definition.name)"
     }
 

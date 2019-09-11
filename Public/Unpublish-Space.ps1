@@ -20,7 +20,11 @@ function Unpublish-Space {
         [Parameter(Mandatory, Position = 1)]
         [ValidateNotNullOrEmpty()]
         [psobject]
-        $Definition
+        $Definition,
+
+        [Parameter()]
+        [Int]
+        $Timeout = 60
     )
 
     begin {
@@ -35,8 +39,8 @@ function Unpublish-Space {
         foreach ($d in $def.services) {
             Remove-Service -Guid (Get-ServiceInstance -Space $space -Name $d.name).guid | Out-Null
         }
-        Wait-ServiceOperations -Space $space | Out-Null
-        Wait-RemoveSpace -Space $space | Out-Null
+        Wait-ServiceOperations -Space $space -Timeout $Timeout| Out-Null
+        Wait-RemoveSpace -Space $space -Timeout $Timeout | Out-Null
         Write-Information "Unpublished space $($def.name)"    
     }
 
