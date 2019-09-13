@@ -52,7 +52,7 @@ function New-ServiceAsync {
         Write-Debug "[$($MyInvocation.MyCommand.Name)] PSBoundParameters: $($PSBoundParameters | Out-String)"
         $service = Get-Service -Space $space -Name $servicename
         Write-Debug ($service | ConvertTo-Json -Depth 20)
-        $serviceplans = Get-ServicePlan -Service $service
+        $serviceplans = Get-ServicePlans -Service $service
         Write-Debug ($serviceplans | ConvertTo-Json -Depth 20)
         Write-Output (New-Service $Space $serviceplans $Plan $Name $Params)
     }

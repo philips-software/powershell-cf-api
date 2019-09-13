@@ -15,7 +15,7 @@ function Get-Space {
     [CmdletBinding()]
     [OutputType([psobject])]
     param(
-        [Parameter( Position = 0, Mandatory)]
+        [Parameter( Position = 0, Mandatory, ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
         [String]
         $Name

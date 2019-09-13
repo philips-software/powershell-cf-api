@@ -7,6 +7,8 @@
     This parameter is a org object
 .PARAMETER Definition
     This parameter is the object that defines the Definition of the space
+.PARAMETER Timeout
+    This parameter is how long in minutes to wait for timeout (Defaults to 60)
 #>
 function Publish-Space {
 
@@ -41,10 +43,10 @@ function Publish-Space {
         } else {
             Write-Verbose "Publish-Space: '$($Definition.name)' exists, skipping"
         }
-        Add-RolesFromDefinition $Definition.roles.developers "developers" | Out-Null
-        Add-RolesFromDefinition $Definition.roles.managers "managers" | Out-Null
-        Add-RolesFromDefinition $Definition.roles.auditors "auditors" | Out-Null
-        foreach ($s in $Definition.services) {
+        Add-RolesFromDefinition -UserNames $Definition.roles.developers -RoleName "developers" | Out-Null
+        Add-RolesFromDefinition -UserNames $Definition.roles.managers -RoleName "managers" | Out-Null
+        Add-RolesFromDefinition -UserNames $Definition.roles.auditors -RoleName "auditors" | Out-Null
+        foreach ($s in $Definition.services) {            
             $serviceInstance = Get-ServiceInstance -Space $space -Name $s.name
             if ($null -eq $serviceInstance) {
                 New-ServiceAsync -Space $space -ServiceName $s.service -Plan $s.plan -Name $s.name -Params $s.params | Out-Null
