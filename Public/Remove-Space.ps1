@@ -25,6 +25,7 @@ function Remove-Space {
 
     process {
         Write-Debug "[$($MyInvocation.MyCommand.Name)] PSBoundParameters: $($PSBoundParameters | Out-String)"
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         
         $base = Get-BaseHost
         $url = "$($base)/v2/spaces/$($Space.metadata.guid)?async=true&recursive=true"
