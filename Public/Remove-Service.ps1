@@ -19,6 +19,7 @@ function Remove-Service {
 
     begin {
         Write-Verbose "[$($MyInvocation.MyCommand.Name)] Function started"
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
         $base = Get-BaseHost
         $url = "$($base)/v2/service_instances/$($Guid)?accepts_incomplete=true&async=true"
