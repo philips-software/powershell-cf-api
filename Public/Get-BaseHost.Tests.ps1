@@ -14,6 +14,5 @@ Describe "Get-BaseHost" {
             Set-Variable -Scope Script -Name baseHost -Value $null
             { Get-BaseHost } | Should -Throw "baseHost is not set in script variable. Call Get-Credentials first"
         }
-
     }
 }

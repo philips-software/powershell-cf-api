@@ -17,13 +17,11 @@ function Get-BaseHost {
     process {
         Write-Debug "[$($MyInvocation.MyCommand.Name)] PSBoundParameters: $($PSBoundParameters | Out-String)"
 
-        $baseHost = Get-Variable -Scope Script -Name baseHost -ValueOnly
-        if ($null -eq $baseHost) {
+        if ($null -eq $script:baseHost) {
             $message = "baseHost is not set in script variable. Call Get-Credentials first"
-            Write-Error -Message $message
             throw $message
         }
-        return $baseHost
+        return $script:baseHost
     }
 
     end {
