@@ -15,12 +15,12 @@ function New-Space {
     [CmdletBinding()]
     [OutputType([psobject])]
     param(
-        [Parameter(Mandatory, ValueFromPipeline)]
+        [Parameter(Mandatory, Position = 0, ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
         [psobject]
         $Org,
 
-        [Parameter(Position = 0, Mandatory)]
+        [Parameter(Position = 1, Mandatory)]
         [ValidateNotNullOrEmpty()]
         [String]
         $Name
@@ -51,7 +51,7 @@ function New-Space {
             Write-Error -Message $message
             throw $message
         }
-        Write-Output ($response | ConvertFrom-Json)        
+        Write-Output ($response.Content | ConvertFrom-Json)        
     }
 
     end {

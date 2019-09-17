@@ -1,3 +1,29 @@
-1.0.1 - Inital release 
+## 1.0.5 - Inital release 
 
-  Please excuse that I had to use 1.0.1 as I use the semver for nuget package versioning and 1.0.0 has been pushed previously.
+  Please excuse that the initial release is 1.0.5. The previous semver were incorrectly published as nuget package and cannot be removed.
+
+## 1.0.6
+
+  - Get-Env: added
+
+## 1.0.7
+
+  - Publish-Space: Added -Timeout param with 60m defaults
+  - UnPublish-Space: Added -Timeout param with 60m defaults
+
+## 2.0.0
+
+__Breaking changes:__
+- Corrected Cmdlet named 'Get-ServicePlan' to 'Get-ServicePlans'
+
+_Potential breaking changes:_
+- New-Service: error message corrected when plan is not found
+- New-UserProvidedService: positional parameters did not include "Space"
+
+Minor corrections:
+- Get-ServiceInstance: now has positional parameter for 'Name'
+- Get-Space: supports 'Name' from pipeline
+- New-Space: supports positional parameters
+
+Changes:
+- Add full suite of Pester tests.

@@ -20,9 +20,9 @@ function Get-ServiceInstance {
         [psobject]
         $Space,
 
-        [Parameter(Mandatory)]
+        [Parameter(Position = 1, Mandatory)]
         [ValidateNotNullOrEmpty()]
-        [psobject]
+        [String]
         $Name
     )
 
@@ -32,9 +32,9 @@ function Get-ServiceInstance {
 
     process {
         Write-Debug "[$($MyInvocation.MyCommand.Name)] PSBoundParameters: $($PSBoundParameters | Out-String)"
-        $summary = Get-SpaceSummary $space
+        $summary = Get-SpaceSummary $Space
         Write-Debug $summary | ConvertTo-Json
-        Write-Output (@($summary.services | Where-Object {$_.name -eq $name})[0])
+        Write-Output (@($summary.services | Where-Object {$_.name -eq $Name})[0])
     }
 
     end {

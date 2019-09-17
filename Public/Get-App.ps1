@@ -16,12 +16,12 @@ function Get-App {
     [CmdletBinding()]
     [OutputType([psobject])]
     param(
-        [Parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName )]
+        [Parameter(Mandatory, Position = 0, ValueFromPipeline, ValueFromPipelineByPropertyName )]
         [ValidateNotNullOrEmpty()]
         [psobject]
         $Space,
 
-        [Parameter( Position = 0, Mandatory)]
+        [Parameter( Position = 1, Mandatory)]
         [ValidateNotNullOrEmpty()]
         [String]
         $Name

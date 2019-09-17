@@ -16,23 +16,23 @@ function Wait-CreateService {
 
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory, ValueFromPipeline)]
+        [Parameter(Mandatory, Position = 0, ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
         [psobject]
         $Space,
         
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, Position = 1)]
         [ValidateNotNullOrEmpty()]
         [psobject]
         $ServiceInstance,
 
-        [Parameter()]
+        [Parameter(Position = 2)]
         [Int]
         $Seconds = 3,
 
-        [Parameter()]
+        [Parameter(Position = 3)]
         [Int]
-        $Timeout = 15
+        $Timeout = 900
     )
 
     begin {
@@ -41,21 +41,14 @@ function Wait-CreateService {
 
     process {
         Write-Debug "[$($MyInvocation.MyCommand.Name)] PSBoundParameters: $($PSBoundParameters | Out-String)"
-
-        $startDate = Get-Date
-        do {
+        {
             $summary = Get-SpaceSummary -Space $Space
             $operation = $summary.services | Where-Object {$_.name -eq $ServiceInstance.entity.name } | Select-Object -first 1 | Select-Object -Property last_operation | ConvertTo-Json | ConvertFrom-Json
-            Write-Verbose "service instance '$($serviceinstance.entity.name)' $($operation.last_operation.type) $($operation.last_operation.state)..."
-            if ($operation.last_operation.state -ne 'in progress') {
-                Write-Verbose "Wait-CreateService: complete"
-                return
-            }
-            Start-Sleep -Seconds $Seconds
-        } while ($startDate.AddMinutes($Timeout) -gt (Get-Date))
-        $message = "Wait-CreateService: timeout"
-        Write-Error -Message $message
-        throw $message
+            Write-Verbose "service instance $($serviceinstance.entity.name)" 
+            Write-Verbose "last operation = $($operation.last_operation.type)"
+            Write-Verbose "last state = $($operation.last_operation.state)"
+            ($operation.last_operation.state -ne 'in progress')         
+        } | Wait-Until -Seconds $Seconds -Timeout $Timeout
     }
 
     end {

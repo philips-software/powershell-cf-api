@@ -15,12 +15,12 @@ function Set-Headers {
     [CmdletBinding()]
     [OutputType([psobject])]
     param(
-        [Parameter(Mandatory, ValueFromPipeline)]
+        [Parameter(Mandatory, Position=0, ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
         [psobject]
         $Token,
 
-        [Parameter()]
+        [Parameter(Position = 1)]
         [int]
         $ExpireSlewSeconds = 30
     )

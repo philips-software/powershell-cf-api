@@ -21,26 +21,27 @@ function New-Service {
     [CmdletBinding()]
     [OutputType([psobject])]
     param(
-        [Parameter(Mandatory, ValueFromPipeline)]
+        [Parameter(Mandatory, ValueFromPipeline, Position = 0)]
         [ValidateNotNullOrEmpty()]
         [psobject]
         $Space,
 
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, Position = 1)]
         [ValidateNotNullOrEmpty()]
         [psobject[]]
         $ServicePlans,
 
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, Position = 2)]
         [ValidateNotNullOrEmpty()]
         [String]
         $Plan,
 
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, Position = 3)]
         [ValidateNotNullOrEmpty()]
         [String]
         $Name,
 
+        [Parameter(Position = 4)]
         $params = @()
     )
 
@@ -53,7 +54,7 @@ function New-Service {
 
         $serviceplan = $ServicePlans | Where-Object {$_.entity.name -eq $Plan}
         if ($serviceplan.Count -eq 0) {
-            $message = "New-Service: $($url) $($response.StatusCode)"
+            $message = "service plan not found"
             Write-Error -Message $message
             throw $message
         }
@@ -68,15 +69,14 @@ function New-Service {
         $header = Get-Header
         $response = Invoke-Retry -ScriptBlock {
             Write-Output (Invoke-WebRequest -Uri $url -Method Post -Header $header -Body ($body | ConvertTo-Json))
-        }
-        
+        }        
         Write-Debug $response
         if (($response.StatusCode -ne 202) -and ($response.StatusCode -ne 201)) {
             $message = "New-Service: $($url) $($response.StatusCode)"
             Write-Error -Message $message
             throw $message
         }
-        Write-Output ($response | ConvertFrom-Json) 
+        Write-Output ($response.Content | ConvertFrom-Json) 
     }
 
     end {

@@ -47,33 +47,31 @@ function Get-Token {
         Set-Variable -Name baseHost -Scope Script -Value $CloudFoundryAPI
         $url = "$($CloudFoundryAPI)/v2/info"
         Write-Debug $url
-        $headers = @{
+        $header = @{
             "Authorization"="Basic Y2Y6"
             "Accept"="application/json"
             "Content-Type"="application/x-www-form-urlencoded; charset=UTF-8"
         }
         $response = Invoke-Retry -ScriptBlock {
-            Write-Output (Invoke-WebRequest -uri $url -Method Get -Header $headers)
+            Write-Output (Invoke-WebRequest -Uri $url -Method Get -Header $header)
         }       
         if ($response.StatusCode -ne 200) {
             $message = "$($url) $($response.StatusCode)"
             Write-Error $message
             throw $message
         }
-        $url = ($response | ConvertFrom-Json).authorization_endpoint + "/oauth/token"
+        $url = ($response.Content | ConvertFrom-Json).authorization_endpoint + "/oauth/token"
         Set-Variable -Name oAuthTokenEndpoint -Scope Script -Value $url
         $body = "grant_type=password&password=$($Password)&scope=&username=$($Username)"
         $response = Invoke-Retry -ScriptBlock {
-            Write-Output (Invoke-WebRequest -uri $url -Method Post -Header $headers -Body $body)
+            Write-Output (Invoke-WebRequest -Uri $url -Method Post -Header $header -Body $body)
         }        
-        Write-Debug $response
-
         if ($response.StatusCode -ne 200) {
             $message = "Get-Credentials: $($url) $($response.StatusCode)"
             Write-Error -Message $message
             throw $message
         }                    
-        Write-Output $response | ConvertFrom-Json
+        Write-Output $response.Content | ConvertFrom-Json
     }
 
     end {

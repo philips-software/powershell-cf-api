@@ -35,13 +35,17 @@ function Unpublish-Space {
         Write-Debug "[$($MyInvocation.MyCommand.Name)] PSBoundParameters: $($PSBoundParameters | Out-String)"
 
         $space = Get-Space -Name $Definition.name
-        Remove-AllServiceBindings -Space $space
-        foreach ($d in $def.services) {
-            Remove-Service -Guid (Get-ServiceInstance -Space $space -Name $d.name).guid | Out-Null
+        if ($null -ne $space) {
+            Remove-AllServiceBindings -Space $space
+            foreach ($d in $Definition.services) {
+                Remove-Service -Guid (Get-ServiceInstance -Space $space -Name $d.name).guid | Out-Null
+            }
+            Wait-ServiceOperations -Space $space -Timeout $Timeout| Out-Null
+            Wait-RemoveSpace -Space $space -Timeout $Timeout | Out-Null
+            Write-Information "Unpublished space $($Definition.name)"    
+        } else {
+            Write-Debug "Space does not exist"
         }
-        Wait-ServiceOperations -Space $space -Timeout $Timeout| Out-Null
-        Wait-RemoveSpace -Space $space -Timeout $Timeout | Out-Null
-        Write-Information "Unpublished space $($def.name)"    
     }
 
     end {

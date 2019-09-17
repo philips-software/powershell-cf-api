@@ -19,24 +19,25 @@ function New-UserProvidedService {
     [CmdletBinding()]
     [OutputType([psobject])]
     param(
-        [Parameter(Mandatory, ValueFromPipeline)]
+        [Parameter(Position = 0, Mandatory, ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
         [psobject]
         $Space,
 
-        [Parameter(Position = 0, Mandatory)]
+        [Parameter(Position = 1, Mandatory)]
         [ValidateNotNullOrEmpty()]
         [String]
         $Name,
 
-        [Parameter(Position = 1)]
+        [Parameter(Position = 2)]
+        [psobject[]]
         $Params,
 
-        [Parameter(Position = 2)]
+        [Parameter(Position = 3)]
         [String]
         $SyslogDrainUrl,
 
-        [Parameter(Position = 3)]
+        [Parameter(Position = 4)]
         [String]
         $RouteServiceUrl
     )
@@ -68,7 +69,7 @@ function New-UserProvidedService {
             Write-Error -Message $message
             throw $message
         }
-        Write-Output ($response | ConvertFrom-Json)
+        Write-Output ($response.Content | ConvertFrom-Json)
     }
 
     end {

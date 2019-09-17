@@ -38,7 +38,7 @@ function Remove-Space {
             Write-Error -Message $message
             throw $message
         }
-        Write-Output  $response | ConvertFrom-Json
+        Write-Output  $response.content | ConvertFrom-Json
     }
 
     end {

@@ -74,7 +74,7 @@ Wait-Job
 
 # Services
 Get-Service
-Get-ServicePlan
+Get-ServicePlans
 New-Service
 New-ServiceAsync
 Wait-CreateService

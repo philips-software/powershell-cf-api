@@ -15,17 +15,17 @@ function Set-SpaceRole {
     [CmdletBinding()]
     [OutputType([psobject])]
     param(
-        [Parameter(Mandatory, ValueFromPipeline)]
+        [Parameter(Mandatory, Position = 0, ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
         [psobject]
         $Space,
         
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, Position = 1)]
         [ValidateNotNullOrEmpty()]
         [String]
         $Username,
 
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, Position = 2)]
         [ValidateNotNullOrEmpty()]
         [String]
         $Role
@@ -52,7 +52,7 @@ function Set-SpaceRole {
             Write-Error -Message $message
             throw $message
         }
-        Write-Output ($response | ConvertFrom-Json)        
+        Write-Output ($response.content | ConvertFrom-Json)        
     }
 
     end {
