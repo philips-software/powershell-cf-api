@@ -36,7 +36,8 @@ function Get-Token {
     )
 
     begin {
-        Write-Verbose "[$($MyInvocation.MyCommand.Name)] Function started"        
+        Write-Verbose "[$($MyInvocation.MyCommand.Name)] Function started"
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12    
     }
 
     process {

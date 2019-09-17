@@ -37,7 +37,8 @@ function Set-SpaceRole {
 
     process {
         Write-Debug "[$($MyInvocation.MyCommand.Name)] PSBoundParameters: $($PSBoundParameters | Out-String)"
-
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        
         $path = ($Space.entity | Select-Object -ExpandProperty "$($Role)_url")
         $base = Get-BaseHost
         $url = "$($base)$($path)"

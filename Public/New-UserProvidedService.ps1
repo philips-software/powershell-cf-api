@@ -44,6 +44,7 @@ function New-UserProvidedService {
 
     begin {
         Write-Verbose "[$($MyInvocation.MyCommand.Name)] Function started"
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
     }
 
     process {

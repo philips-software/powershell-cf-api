@@ -19,6 +19,7 @@ function Remove-ServiceBinding {
 
     begin {
         Write-Verbose "[$($MyInvocation.MyCommand.Name)] Function started"
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         
         $base = Get-BaseHost
         $url = "$($base)/v2/service_bindings/$($ServiceBinding.metadata.guid)?accepts_incomplete=true"

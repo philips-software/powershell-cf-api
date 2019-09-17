@@ -14,6 +14,7 @@ function Get-Header {
 
     begin {
         Write-Verbose "[$($MyInvocation.MyCommand.Name)] Function started"
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
     }
 
     process {
