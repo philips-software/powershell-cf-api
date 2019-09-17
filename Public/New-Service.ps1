@@ -21,26 +21,27 @@ function New-Service {
     [CmdletBinding()]
     [OutputType([psobject])]
     param(
-        [Parameter(Mandatory, ValueFromPipeline)]
+        [Parameter(Mandatory, ValueFromPipeline, Position = 0)]
         [ValidateNotNullOrEmpty()]
         [psobject]
         $Space,
 
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, Position = 1)]
         [ValidateNotNullOrEmpty()]
         [psobject[]]
         $ServicePlans,
 
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, Position = 2)]
         [ValidateNotNullOrEmpty()]
         [String]
         $Plan,
 
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, Position = 3)]
         [ValidateNotNullOrEmpty()]
         [String]
         $Name,
 
+        [Parameter(Position = 4)]
         $params = @()
     )
 

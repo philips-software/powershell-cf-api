@@ -2,7 +2,7 @@
 .Synopsis
    Removes a service using the guid
 .DESCRIPTION
-   The Remove-Service cmdlet removes a single service using a guid
+   The Remove-Service cmdlet removes a single service using guid
 .PARAMETER Guid
     This parameter is the guid of a service
 #>
@@ -11,7 +11,7 @@ function Remove-Service {
     [CmdletBinding()]
     [OutputType([psobject])]
     param(
-        [Parameter(Mandatory, ValueFromPipeline)]
+        [Parameter(Mandatory, Position = 0, ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
         [String]
         $Guid
@@ -32,7 +32,7 @@ function Remove-Service {
             Write-Error -Message $message
             throw $message
         }
-        Write-Output ($response | ConvertFrom-Json)            
+        Write-Output ($response.content | ConvertFrom-Json)            
     }
 
     process {

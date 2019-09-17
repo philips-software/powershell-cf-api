@@ -11,7 +11,7 @@ function Remove-ServiceBinding {
     [CmdletBinding()]
     [OutputType([psobject])]
     param(
-        [Parameter(Mandatory, ValueFromPipeline)]
+        [Parameter(Mandatory, Position=0, ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
         [psobject]
         $ServiceBinding
@@ -32,7 +32,7 @@ function Remove-ServiceBinding {
             Write-Error -Message $message
             throw $message
         }
-        Write-Output ($response | ConvertFrom-Json)    
+        Write-Output ($response.content | ConvertFrom-Json)    
     }
 
     process {

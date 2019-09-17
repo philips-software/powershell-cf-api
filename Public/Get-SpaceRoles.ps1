@@ -15,12 +15,12 @@ function Get-SpaceRoles {
     [CmdletBinding()]
     [OutputType([psobject[]])]
     param(
-        [Parameter(Mandatory, ValueFromPipeline)]
+        [Parameter(Mandatory, Position = 0, ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]        
         [psobject]
         $Space,
 
-        [Parameter( Position = 0, Mandatory)]
+        [Parameter( Position = 1, Mandatory)]
         [ValidateNotNullOrEmpty()]
         [String]
         $Role

@@ -10,7 +10,7 @@ function Remove-AllServiceBindings {
 
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory, ValueFromPipeline)]
+        [Parameter(Mandatory, Position = 0, ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
         [psobject]
         $Space

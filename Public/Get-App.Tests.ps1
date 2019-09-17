@@ -3,33 +3,35 @@ $source = Split-Path -Parent $MyInvocation.MyCommand.Path
 . "$source\..\Private\Invoke-GetRequest.ps1"
 
 Describe "Get-App" {
-    Context "API call" {
-        $App = New-Object PsObject -Property @{Name="myApp"}
-        $Space = New-Object PsObject -Property @{metadata=@{guid="123"}}
-        $invokeResponse = New-Object PsObject -Property @{resources=@($App)}
-        Mock Invoke-GetRequest { $invokeResponse } `
-            -Verifiable -ParameterFilter {$path -eq "/v2/apps?q=name%3A$($App.Name)&q=space_guid%3A$($Space.metadata.guid)"}
-        
-        It "Called with the correct URL" {
-            Get-App -Space $Space -Name $App.Name
+    $TargetApp = [PSCustomObject]@{Name="myApp"}
+    $TargetSpace = [PSCustomObject]@{metadata=@{guid="123"}}
+    $response = [PSCustomObject]@{resources=@($TargetApp)}
+    Mock Invoke-GetRequest { $response } -Verifiable -ParameterFilter {$path -eq "/v2/apps?q=name%3A$($TargetApp.Name)&q=space_guid%3A$($TargetSpace.metadata.guid)"}
+    Context "API call" {        
+        It "is called with the correct URL" {
+            Get-App -Space $TargetSpace -Name $TargetApp.Name
             Assert-VerifiableMock
         }
-        It "Returns the first resource object" {
-            (Get-App -Space $Space -Name $App.Name) | Should be $app
-        }
-        It "Uses value from pipeline" {
-            $Space | Get-App -Name $App.Name | Should be $app
+        It "returns the first resource object" {
+            (Get-App -Space $TargetSpace -Name $TargetApp.Name) | Should be $Targetapp
         }
     }
-    Context "Parameter validation" {
-        It "That Name cannot be empty" {
+    Context "parameters" {
+        It "ensures 'Name' cannot be empty" {
             { Get-App -Name "" } | Should -Throw "The argument is null or empty"
         }        
-        It "That Name cannot be null" {
+        It "ensures 'Name' cannot be null" {
             { Get-App -Name $null } | Should -Throw "The argument is null or empty"
         }
-        It "That Space cannot be empty" {
+        It "ensures 'Space' cannot be empty" {
             { Get-App -Name "foo" -Space $null } | Should -Throw "The argument is null or empty"
+        }
+        It "supports positional" {
+            Get-App $TargetSpace $TargetApp.Name
+            Assert-VerifiableMock            
+        }
+        It "supports 'Space' from pipeline" {
+            $TargetSpace | Get-App -Name $TargetApp.Name | Should be $Targetapp
         }
     }    
 }

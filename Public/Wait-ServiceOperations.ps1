@@ -8,24 +8,24 @@
 .PARAMETER Seconds
     This parameter is how long many seconds between each poll. Defaults to 3s.
 .PARAMETER Timeout
-    This parameter is how long in minutes before the command will timeout. Defaults to 15m
+    This parameter is how long in seconds before the command will timeout. Defaults to 15m
 #>
 function Wait-ServiceOperations {
 
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory, ValueFromPipeline)]
+        [Parameter(Mandatory, Position = 0, ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
         [psobject]
         $Space,
         
-        [Parameter()]
+        [Parameter(Position = 1)]
         [Int]
-        $Seconds = 10,
+        $Seconds = 3,
 
-        [Parameter()]
+        [Parameter(Position = 2)]
         [Int]
-        $Timeout = 15
+        $Timeout = 900
     )
 
     begin {
@@ -33,21 +33,11 @@ function Wait-ServiceOperations {
     }
 
     process {
-        Write-Debug "[$($MyInvocation.MyCommand.Name)] PSBoundParameters: $($PSBoundParameters | Out-String)"
-
-        $startDate = Get-Date
-        do {
+        Write-Debug "[$($MyInvocation.MyCommand.Name)] PSBoundParameters: $($PSBoundParameters | Out-String)"        
+        {
             $summary = Get-SpaceSummary -Space $Space
-            if (@($summary.services | Where-Object {[Bool]($_.PsObject.Properties.name -match "service_plan")} | Where-Object { $_.last_operation.state -eq 'in progress' }).count -eq 0) {
-                Write-Verbose "Wait-ServiceOperations: complete"
-                return $summary
-            }
-            Write-Verbose "$($summary.services | Where-Object {$_.last_operation.state -ne 'succeeded'})"
-            Start-Sleep -Seconds $Seconds
-        } while ($startDate.AddMinutes($Timeout) -gt (Get-Date))
-        $message = "Wait-ServiceOperations: timeout"
-        Write-Error -Message $message
-        throw $message        
+            (@($summary.services | Where-Object {[Bool]($_.PsObject.Properties.name -match "service_plan")} | Where-Object { $_.last_operation.state -eq 'in progress' }).count -eq 0)
+        } | Wait-Until -Seconds $Seconds -Timeout $Timeout
     }
 
     end {

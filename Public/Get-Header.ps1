@@ -21,14 +21,14 @@ function Get-Header {
 
         $header = Get-Variable -Scope Script -Name headers -ValueOnly
         if ($null -eq $header) {
-            $message = "header is not set in script varaible. Call Get-Credentials first"
+            $message = "header is not set in script variable. Call Get-Credentials first"
             Write-Error -Message $message
             throw $message
         }
 
         $token = Get-Variable -Scope Script -Name token -ValueOnly
         if ($null -eq $token) {
-            $message = "token is not set in script varaible. Call Get-Credentials first"
+            $message = "token is not set in script variable. Call Get-Credentials first"
             Write-Error -Message $message
             throw $message
         }

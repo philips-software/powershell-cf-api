@@ -22,12 +22,6 @@
         {
             "name": "logproxy",
             "logproxy_url": "https://logproxy.test.cloud.pcftest.com/syslog/drain/1234"
-        },
-        {
-            "name": "eureka-service",
-            "params":{
-                "uri": "https://service-discovery-test.cloud.pcftest.com"
-            }            
         }
     ]
 }

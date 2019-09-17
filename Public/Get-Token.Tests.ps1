@@ -14,7 +14,7 @@ $params = @{
 
 Describe "Get-Token" {
     Context "API call" {
-        It "Called with the correct URLs" {
+        It "is called with the correct URLs" {
             $Content = "{'name': 'foo'}"
             Mock -Command Invoke-WebRequest -MockWith { 
                 if ($Uri -eq "$($CloudFoundryAPI)/v2/info") {
@@ -47,7 +47,7 @@ Describe "Get-Token" {
             Assert-VerifiableMock
         }
     }
-    Context  "Failed API call" {
+    Context  "failed API call" {
         It "fails" {
             Mock -Command Invoke-WebRequest -MockWith { 
                 if ($Uri -eq "$($CloudFoundryAPI)/v2/info") {
@@ -59,7 +59,7 @@ Describe "Get-Token" {
             {Get-Token @params} | Should -Throw "400"
         }
     }
-    Context "Fail API auth" {
+    Context "fail API auth" {
         It "fail" {
             $Content = "{'name': 'foo'}"
             Mock -Command Invoke-WebRequest -MockWith { 

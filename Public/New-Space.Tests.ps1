@@ -6,8 +6,6 @@ $source = Split-Path -Parent $MyInvocation.MyCommand.Path
 . "$source\..\Private\Compare-HashTable.ps1"
 . "$source\..\Private\PesterMatchHashtable.ps1"
 
-$ErrorActionPreference = "Stop"
-
 Describe "New-Space" {
     $TargetOrg = New-Object PsObject -Property @{metadata=@{guid="1"}}
     $TheContent = "{'foo':'bar'}"
@@ -16,7 +14,8 @@ Describe "New-Space" {
     Mock Invoke-Retry { & $ScriptBlock } -Verifiable
     Mock Get-BaseHost { "basehost" } -Verifiable
     Mock Get-Header { $TargetHeader } -Verifiable
-    Context "API Call" {        
+    Mock Invoke-WebRequest {@{StatusCode=201;Content=$TheContent}}
+    Context "API call" {
         Mock Invoke-WebRequest {@{StatusCode=201;Content=$TheContent}} -Verifiable -ParameterFilter {
             $MatchBody = @{
                 "organization_guid" = $TargetOrg.metadata.guid
@@ -32,14 +31,6 @@ Describe "New-Space" {
             New-Space -Org $TargetOrg -Name $TargetName | Should MatchHashtable ($TheContent | ConvertFrom-Json)
             Assert-VerifiableMock
         }
-        It "params by position" {
-            New-Space $TargetOrg $TargetName | Should MatchHashtable ($TheContent | ConvertFrom-Json)
-            Assert-VerifiableMock
-        }
-        It "supports pipeline" {
-            $TargetOrg | New-Space -Name $TargetName | Should MatchHashtable ($TheContent | ConvertFrom-Json)
-            Assert-VerifiableMock
-        }
     }
     Context "API return values" {
         It "Returns non 201 status" {
@@ -47,10 +38,16 @@ Describe "New-Space" {
             { New-Space -Org $TargetOrg -Name $TargetName }  | Should -Throw "basehost/v2/spaces 400"
         }
     }
-    Context "Parameter validation" {
-        It "That Org cannot be null" {
+    Context "parameters" {
+        It "ensures 'Org' cannot be null" {
             {  New-Space -Org $null -Name "x" } | Should -Throw "Cannot validate argument on parameter 'Org'. The argument is null or empty"
         }        
+        It "supports positional" {
+            New-Space $TargetOrg $TargetName
+        }
+        It "supports 'Org' from pipeline" {            
+            $TargetOrg | New-Space -Name $TargetName 
+        }
    }    
 
 }

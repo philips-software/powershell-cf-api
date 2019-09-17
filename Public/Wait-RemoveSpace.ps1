@@ -13,14 +13,18 @@ function Wait-RemoveSpace {
     [CmdletBinding()]
     [OutputType([psobject])]
     param(
-        [Parameter(Mandatory, ValueFromPipeline)]
+        [Parameter(Mandatory, Position = 0, ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
         [psobject]
         $Space,
         
-        [Parameter()]
+        [Parameter(Position = 1)]
         [Int]
-        $Timeout = 15
+        $Seconds = 3,
+
+        [Parameter(Position = 2)]
+        [Int]
+        $Timeout = 900
     )
 
     begin {
@@ -29,21 +33,12 @@ function Wait-RemoveSpace {
 
     process {
         Write-Debug "[$($MyInvocation.MyCommand.Name)] PSBoundParameters: $($PSBoundParameters | Out-String)"
-
-        $startDate = Get-Date
-        do {
+        {
             $job = Remove-Space -Space $space
             Write-Debug $job | ConvertTo-Json
             $jobStatus = Wait-JobStatus -Job $job
-            if ($jobStatus.entity.status -ne 'failed') {
-                Write-Verbose "Wait-RemoveSpace: complete"
-                return $jobStatus
-            }
-            Write-Verbose "retry..."
-        } while ($startDate.AddMinutes($timeout) -gt (Get-Date))
-        $message = "Wait-RemoveSpace: timeout"
-        Write-Error -Message $message
-        throw $message
+            ($jobStatus.entity.status -ne 'failed')
+        } | Wait-Until -Seconds $Seconds -Timeout $Timeout
     }
 
     end {

@@ -19,7 +19,7 @@ function Get-BaseHost {
 
         $baseHost = Get-Variable -Scope Script -Name baseHost -ValueOnly
         if ($null -eq $baseHost) {
-            $message = "baseHost is not set in script varaible. Call Get-Credentials first"
+            $message = "baseHost is not set in script variable. Call Get-Credentials first"
             Write-Error -Message $message
             throw $message
         }

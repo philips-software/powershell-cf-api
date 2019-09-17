@@ -17,27 +17,31 @@ function Wait-CreateServiceInstance {
     [CmdletBinding()]
     [OutputType([psobject])]
     param(
-        [Parameter(Mandatory, ValueFromPipeline)]
+        [Parameter(Mandatory, Position = 0, ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
         [psobject]
         $Space,
         
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, Position = 1)]
         [ValidateNotNullOrEmpty()]
         [String]
         $ServiceName,
 
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, Position = 2)]
         [String]
         $Plan,
 
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, Position = 3)]
         [String]
         $Name,
 
-        [Parameter()]
+        [Parameter(Position = 4)]
         [Int]
-        $Timeout = 15
+        $Seconds = 3,
+
+        [Parameter(Position = 5)]
+        [Int]
+        $Timeout = 900
     )
 
     begin {
@@ -48,7 +52,7 @@ function Wait-CreateServiceInstance {
         Write-Debug "[$($MyInvocation.MyCommand.Name)] PSBoundParameters: $($PSBoundParameters | Out-String)"
 
         $serviceinstance = New-ServiceAsync -Space $space -ServiceName $servicename -Plan $plan -Name $name
-        Wait-CreateService -Space $space -ServiceInstance $serviceinstance -Timeout $Timeout
+        Wait-CreateService -Space $space -ServiceInstance $serviceinstance -Seconds $Seconds -Timeout $Timeout
         Write-Output $serviceinstance
     }
 

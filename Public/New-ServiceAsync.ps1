@@ -21,26 +21,27 @@ function New-ServiceAsync {
     [CmdletBinding()]
     [OutputType([psobject])]
     param(
-        [Parameter(Mandatory, ValueFromPipeline)]
+        [Parameter(Mandatory, Position = 0, ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
         [psobject]
         $Space,
 
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, Position = 1)]
         [ValidateNotNullOrEmpty()]
         [String]
         $ServiceName,
 
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, Position = 2)]
         [ValidateNotNullOrEmpty()]
         [String]
         $Plan,
 
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, Position = 3)]
         [ValidateNotNullOrEmpty()]
         [String]
         $Name,
 
+        [Parameter(Position = 4)]
         $params = @()
     )
 

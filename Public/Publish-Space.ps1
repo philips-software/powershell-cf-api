@@ -43,9 +43,9 @@ function Publish-Space {
         } else {
             Write-Verbose "Publish-Space: '$($Definition.name)' exists, skipping"
         }
-        Add-RolesFromDefinition -UserNames $Definition.roles.developers -RoleName "developers" | Out-Null
-        Add-RolesFromDefinition -UserNames $Definition.roles.managers -RoleName "managers" | Out-Null
-        Add-RolesFromDefinition -UserNames $Definition.roles.auditors -RoleName "auditors" | Out-Null
+        Add-RolesFromDefinition -Space $space -UserNames $Definition.roles.developers -RoleName "developers" | Out-Null
+        Add-RolesFromDefinition -Space $space -UserNames $Definition.roles.managers -RoleName "managers" | Out-Null
+        Add-RolesFromDefinition -Space $space -UserNames $Definition.roles.auditors -RoleName "auditors" | Out-Null
         foreach ($s in $Definition.services) {            
             $serviceInstance = Get-ServiceInstance -Space $space -Name $s.name
             if ($null -eq $serviceInstance) {
