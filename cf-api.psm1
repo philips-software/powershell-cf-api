@@ -1,5 +1,10 @@
 ﻿[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
+$modules = Get-Module -list
+if ($modules.Name -notcontains 'pester') {
+    Install-Module -Name Pester -Force -SkipPublisherCheck -Scope CurrentUser
+}
+
 #region LoadFunctions
 
 $PublicFunctions = @( Get-ChildItem -Path "$PSScriptRoot/Public/*.ps1" -Exclude *.Tests.ps1 -ErrorAction SilentlyContinue )
