@@ -68,7 +68,6 @@ jobs:
   - task: PowerShell@2
     inputs:
       filePath: '$(Build.SourcesDirectory)/integration-tests/test-publish-unpublish.ps1'
-      workingDirectory: $(Build.SourcesDirectory)/integration-tests'
       arguments: -orgname $(CF_ORG) -username $(CF_USERNAME) -password $(CF_PASSWORD) -api $(CF_API)
       pwsh: true
 
