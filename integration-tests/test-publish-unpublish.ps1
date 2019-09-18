@@ -6,7 +6,7 @@ $script:VerbosePreference = "SilentlyContinue"
 Describe "Integration Test" {
     Context "Using definition" {
         $org = Get-OrgCredentials $orgname $username $password -Verbose -CloudFoundryAPI $api
-        $def = Get-Content .\test-definition.json -Verbose | ConvertFrom-Json
+        $def = Get-Content $PSScriptRoot/test-definition.json -Verbose | ConvertFrom-Json
         It "Publishes" {            
             Publish-Space -Org $org -Definition $def -Verbose 
             $Space = Get-Space "test-integration-12938472947"
