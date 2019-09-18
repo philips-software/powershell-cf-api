@@ -44,7 +44,7 @@ jobs:
       testResultsFiles: '**/TEST-*.xml'
       failTaskOnFailedTests: true
 
-- job: integration-test
+- job: integrationtest
   dependsOn:
   - semver
   - build
@@ -75,7 +75,7 @@ jobs:
   dependsOn:
   - semver
   - build
-  - integration-test
+  - integrationtest
   pool:
     vmImage: windows-latest
   steps:
