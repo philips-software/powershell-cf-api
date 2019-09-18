@@ -64,3 +64,23 @@ jobs:
       nuGetFeedType: external
       publishFeedCredentials: nuget.org
     displayName: 'NuGet push' 
+
+  - task: NuGetCommand@2
+    displayName: 'Download cf-api module  nuget source'
+    inputs:
+      command: custom
+      arguments: 'install cf-api -Version 2.0.0 -OutputDirectory $(Agent.ToolsDirectory)'
+
+  - task: CopyFiles@2
+    displayName: 'copy module from specific version to $(Agent.ToolsDirectory)'
+    inputs:
+      SourceFolder: '$(Agent.ToolsDirectory)/cf-api.2.0.0'
+      Contents: '**/*'
+      TargetFolder: '$(Agent.ToolsDirectory)/cf-api/'
+
+  - task: PowerShell@2
+    inputs:
+      filePath: test-publish-unpublish.ps1
+      workingDirectory: integration-tests
+      arguments: -orgname $(CF_ORG) -username $(CF_USERNAME) -password $(CF_PASSWORD) -api $(CF_API)
+      pwsh: true

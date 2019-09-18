@@ -1,8 +1,4 @@
-$orgname = $env:CF_ORG
-$username = $env:CF_USERNAME
-$password = $env:CF_PASSWORD
-$api = $env:CF_API
-
+params ($orgname, $username, $password, $api)
 Import-Module "$PSScriptRoot/../cf-api.psm1" -Force
 
 $script:VerbosePreference = "SilentlyContinue"
