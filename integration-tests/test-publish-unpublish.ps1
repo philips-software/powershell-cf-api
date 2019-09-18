@@ -1,4 +1,4 @@
-params ($orgname, $username, $password, $api)
+param ($orgname, $username, $password, $api)
 Import-Module "$PSScriptRoot/../cf-api.psm1" -Force
 
 $script:VerbosePreference = "SilentlyContinue"
