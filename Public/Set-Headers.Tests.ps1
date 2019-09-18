@@ -1,6 +1,6 @@
 $source = Split-Path -Parent $MyInvocation.MyCommand.Path
 . "$source\Set-Headers.ps1"
-. "$source\..\Private\PesterMatchHashtable.ps1"
+. "$source\..\Private\PesterMatchHashtable.Tests.ps1"
 
 Describe "Set-Headers" {
     Context "SciptLevel" {

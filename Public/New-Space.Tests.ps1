@@ -4,7 +4,7 @@ $source = Split-Path -Parent $MyInvocation.MyCommand.Path
 . "$source\Get-Header.ps1"
 . "$source\Invoke-Retry.ps1"
 . "$source\..\Private\Compare-HashTable.ps1"
-. "$source\..\Private\PesterMatchHashtable.ps1"
+. "$source\..\Private\PesterMatchHashtable.Tests.ps1"
 
 Describe "New-Space" {
     $TargetOrg = New-Object PsObject -Property @{metadata=@{guid="1"}}
