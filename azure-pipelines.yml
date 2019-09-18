@@ -64,6 +64,7 @@ jobs:
       Contents: '**/*'
       TargetFolder: '$(Agent.ToolsDirectory)/cf-api/'
 
+  - powershell: gci -recurse $(Build.SourcesDirectory)
   - task: PowerShell@2
     inputs:
       filePath: '$(Build.SourcesDirectory)/integration-tests/test-publish-unpublish.ps1'
