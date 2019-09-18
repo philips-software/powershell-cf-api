@@ -2,7 +2,7 @@ $source = Split-Path -Parent $MyInvocation.MyCommand.Path
 . "$source\Get-Token.ps1"
 . "$source\Invoke-Retry.ps1"
 . "$source\..\Private\Compare-HashTable.ps1"
-. "$source\..\Private\PesterMatchHashtable.ps1"
+. "$source\..\Private\PesterMatchHashtable.Tests.ps1"
 
 #$DebugPreference = "continue"
 

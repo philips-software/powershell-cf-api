@@ -1,8 +1,4 @@
-$orgname = $env:CF_ORG
-$username = $env:CF_USERNAME
-$password = $env:CF_PASSWORD
-$api = $env:CF_API
-
+param ($orgname, $username, $password, $api)
 Import-Module "$PSScriptRoot/../cf-api.psm1" -Force
 
 $script:VerbosePreference = "SilentlyContinue"
@@ -10,7 +6,7 @@ $script:VerbosePreference = "SilentlyContinue"
 Describe "Integration Test" {
     Context "Using definition" {
         $org = Get-OrgCredentials $orgname $username $password -Verbose -CloudFoundryAPI $api
-        $def = Get-Content .\test-definition.json -Verbose | ConvertFrom-Json
+        $def = Get-Content $PSScriptRoot/test-definition.json -Verbose | ConvertFrom-Json
         It "Publishes" {            
             Publish-Space -Org $org -Definition $def -Verbose 
             $Space = Get-Space "test-integration-12938472947"

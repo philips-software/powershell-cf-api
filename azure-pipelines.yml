@@ -11,56 +11,55 @@ trigger:
 
 jobs:
 - template: job-templates/semver.yml@templates
-- job: deploy
-  displayName: nuget deploy
+
+- job: build
   dependsOn:
   - semver
   pool:
     vmImage: windows-latest
-
   steps:
-
   - template: semver-set-env.yml@templates
-
-  - powershell: |
-      $v = "$($env:GITVERSION_SEMVER)-alpha-$($env:GITVERSION_BUILDMETADATA)"
-      "##vso[task.setvariable variable=NUGET_VERSION;]$v"
-    condition: and(succeeded(), ne(variables['GITVERSION_BuildMetaData'], '0'))
-    displayName: set param nuget version (for alpha build)
-    
-  - powershell: |
-      $v = "$($env:GITVERSION_SEMVER)"
-      "##vso[task.setvariable variable=NUGET_VERSION;]$v"
-    condition: and(succeeded(), eq(variables['GITVERSION_BuildMetaData'], '0'))
-    displayName: set param nuget version (for release)    
-
   - task: PowerShell@2
     inputs:
       filePath: 'cf-api.Tests.ps1'
       pwsh: true
-
+    displayName: unit tests
   - task: PublishTestResults@2
     inputs:
       testResultsFormat: 'NUnit'
       testResultsFiles: '**/TEST-*.xml'
       failTaskOnFailedTests: true
-
+    displayName: publish unit test results
+  - task: PowerShell@2
+    inputs:
+      filePath: '$(Build.SourcesDirectory)/integration-tests/test-publish-unpublish.ps1'
+      arguments: -orgname $(CF_ORG) -username $(CF_USERNAME) -password $(CF_PASSWORD) -api $(CF_API)
+      pwsh: true
+    displayName: integration tests
+  - powershell: |
+      $v = "$($env:GITVERSION_SEMVER)-alpha-$($env:GITVERSION_BUILDMETADATA)"
+      "##vso[task.setvariable variable=NUGET_VERSION;]$v"
+    condition: and(succeeded(), ne(variables['GITVERSION_BuildMetaData'], '0'))
+    displayName: set param nuget version (for alpha build)
+  - powershell: |
+      $v = "$($env:GITVERSION_SEMVER)"
+      "##vso[task.setvariable variable=NUGET_VERSION;]$v"
+    condition: and(succeeded(), eq(variables['GITVERSION_BuildMetaData'], '0'))
+    displayName: set param nuget version (for release)
   - task: MarkLindell.h2hextension.envsubst.envsubst@1
     inputs:
       Contents: |
         *.nuspec
         *.psd1
     displayName: 'fix versions in files'
-
   - task: NuGetCommand@2
     inputs:
       command: pack
       packagesToPack: '*.nuspec'
     displayName: 'Nuget pack'
-
   - task: NuGetCommand@2
     inputs:
       command: push
       nuGetFeedType: external
       publishFeedCredentials: nuget.org
-    displayName: 'NuGet push' 
+    displayName: 'NuGet push to nuget.org'
