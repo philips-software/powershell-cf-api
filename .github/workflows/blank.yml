@@ -11,4 +11,4 @@ jobs:
     - uses: actions/checkout@v1
     - name: Run a one-line script
       run: .\cf-api.Tests.ps1
-      shell: powershell
+      shell: pwsh
