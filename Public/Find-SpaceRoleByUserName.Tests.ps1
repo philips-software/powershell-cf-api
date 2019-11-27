@@ -1,5 +1,5 @@
 $source = Split-Path -Parent $MyInvocation.MyCommand.Path
-. "$source\Find-SpaceRoleByUserName.ps1"
+. "$source\Find-SpaceRoleByUsername.ps1"
 
 Describe "Get-SpaceRoleByUserName" {    
     $role1 = [PSCustomObject]@{entity=[PSCustomObject]@{username = "user1"}}
