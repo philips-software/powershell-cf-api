@@ -17,6 +17,4 @@ jobs:
       run: .\cf-api.Tests.ps1
       shell: pwsh
     - name: Show SemVer
-      run: |
-        echo $(cat /home/runner/work/powershell-cf-api/powershell-cf-api/GITVERSION_SEMVER.txt)
-        echo $(cat /home/runner/work/powershell-cf-api/powershell-cf-api/GITVERSION_BUILDMETADATA.txt)
+      run: echo $(cat /home/runner/work/powershell-cf-api/powershell-cf-api/GITVERSION_SEMVER.txt)
