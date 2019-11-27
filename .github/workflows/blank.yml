@@ -9,13 +9,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Get Git Version
+    - name: Execute Git Version
       uses: docker://gittools/gitversion:latest-linux-netcoreapp2.1
       with:
-        args: /github/workspace /nofetch /exec /bin/sh /execargs "-c \"echo \"::set-env name=GitVersion_FullSemVer::$GitVersion_FullSemVer\""
-    - name: Run a one-line script
+        args: /github/workspace /nofetch /exec /bin/sh /execargs "-c \"echo \"::set-output name=FullSemVer::$GitVersion_FullSemVer\""
+    - name: Execute Tests
       run: .\cf-api.Tests.ps1
       shell: pwsh
-    - name: Show env var
-      run: $env:GitVersion_FullSemVer
+    - name: Show SemVer
+      run: echo ${{ steps.vars.outputs.FullSemVer }}
       shell: pwsh
