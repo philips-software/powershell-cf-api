@@ -12,9 +12,9 @@ jobs:
     - name: Execute Git Version
       uses: docker://gittools/gitversion:latest-linux-netcoreapp2.1
       with:
-        args: /github/workspace /nofetch /exec /bin/sh /execargs "-c \"echo $GITVERSION_SEMVER > /github/workspace/GITVERSION_SEMVER.txt && echo $GITVERSION_BUILDMETADATA > /github/workspace/GITVERSION_BUILDMETADATA.txt\""
+        args: /github/workspace /nofetch /exec /bin/sh /execargs "-c \"env > /github/workspace/env.txt\""
     - name: Execute Tests
       run: .\cf-api.Tests.ps1
       shell: pwsh
     - name: Show SemVer
-      run: echo $(cat /home/runner/work/powershell-cf-api/powershell-cf-api/GITVERSION_SEMVER.txt)
+      run: cat /home/runner/work/powershell-cf-api/powershell-cf-api/env.txt
