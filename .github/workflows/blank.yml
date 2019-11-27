@@ -18,4 +18,4 @@ jobs:
       shell: pwsh
     - name: Show SemVer
       run: >-
-        echo $(cat /github/workspace/version.txt)
+        echo $(cat /home/runner/work/powershell-cf-api/powershell-cf-api/version.txt)
