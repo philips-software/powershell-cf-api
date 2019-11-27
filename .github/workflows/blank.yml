@@ -9,6 +9,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    - name: Get Git Version
+      uses: docker://gittools/gitversion:latest-linux-netcoreapp2.1
+      with:
+        args: /github/workspace /nofetch /exec /bin/sh /execargs "-c \"echo $GitVersion_FullSemVer > /github/workspace/version.txt\""
     - name: Run a one-line script
       run: .\cf-api.Tests.ps1
       shell: pwsh
