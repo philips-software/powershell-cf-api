@@ -1,5 +1,5 @@
 $source = Split-Path -Parent $MyInvocation.MyCommand.Path
-. "$source\UnPublish-Space.ps1"
+. "$source\Unpublish-Space.ps1"
 . "$source\Get-Space.ps1"
 . "$source\Remove-AllServiceBindings.ps1"
 . "$source\Remove-Service.ps1"
