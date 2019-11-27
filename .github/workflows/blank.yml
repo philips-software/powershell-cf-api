@@ -12,10 +12,10 @@ jobs:
     - name: Execute Git Version
       uses: docker://gittools/gitversion:latest-linux-netcoreapp2.1
       with:
-        args: /github/workspace /nofetch /exec /bin/sh /execargs "-c \"echo \"::set-output name=FullSemVer::$GitVersion_FullSemVer\""
+        args: /github/workspace /nofetch /exec /bin/sh /execargs "-c \"echo $GitVersion_FullSemVer > /github/workspace/version.txt\""
     - name: Execute Tests
       run: .\cf-api.Tests.ps1
       shell: pwsh
     - name: Show SemVer
-      run: echo ${{ steps.vars.outputs.FullSemVer }}
-      shell: pwsh
+      run: >-
+        echo $(cat /github/workspace/version.txt)
