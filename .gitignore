@@ -1,2 +1,4 @@
 *.nupkg
 TEST-*.xml
+cf-api.nuspec
+cf-api.psd1
