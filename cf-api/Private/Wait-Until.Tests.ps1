@@ -42,7 +42,7 @@ Describe "Wait-Until" {
     }
     Context "parameters" {
         It "ensure 'ScriptBlock' is not null" {
-            { Wait-Until -ScriptBlock $null } |  Should -Throw "*Cannot validate argument on parameter 'ScriptBlock'. The argument is null or empty*"
+            { Wait-Until -ScriptBlock $null } | Should -Throw "*Cannot validate argument on parameter 'ScriptBlock'. The argument is null or empty*"
         }
         It "supports 'ScriptBlock' from pipeline" {
             { $true } | Wait-Until

@@ -1,7 +1,7 @@
 Set-StrictMode -Version Latest
 
 BeforeAll {
-. "$PSScriptRoot\Get-BaseHost.ps1"
+    . "$PSScriptRoot\Get-BaseHost.ps1"
 }
 Describe "Get-BaseHost" {
     Context "Access Script Level Variables" {
