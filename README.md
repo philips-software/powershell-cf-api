@@ -1,7 +1,5 @@
 # powershell-cf-api
 
-[![Slack](https://philips-software-slackin.now.sh/badge.svg)](https://philips-software-slackin.now.sh)
-
 **Description**:  This PowerShell module can deploy and teardown CloudFoundry spaces and services via a json definition file. It is very similar to the manifest concept supported by the CLI wrt to applications.  This was implemented using the CloudFoundry APIs as an alternative to the Cloud Foundry command line interface (CLI). The powershell module can be used to create automated deployment scripts that perform work asyncrhonously. The cmdlets support waiting for service operations to complete making it useful for automated deployment and operational scripts.
 
 The module is not intended to be a replacement for the CF CLI but does provide a few distinct advantages:
@@ -21,12 +19,13 @@ The module is not intended to be a replacement for the CF CLI but does provide a
 
 ## Installation
 
-This package is available on [nuget.org](https://www.nuget.org/packages/cf-api)
+This package is available on [powershellgallery.com](https://www.powershellgallery.com/packages/cf-api)
 
+```powershell
+Install-Module cf-api
+Import-Module cf-api
 ```
-nuget install cf-api -Version {version}
-Import-Module cf-api-{version}/cf-api.psm1 -Scope Local
-```
+
 ## Configuration
 
 No additional configuration is required
@@ -39,13 +38,13 @@ Functions perform operations against PSObjects returned from other functions.
 
 For example:
 
-```
+```powershell
 $org = Get-OrgCredentials -OrgName "myorg" -Username "myusername" -Password "mypassword"
 Get-Space -Name "myspacename" | Get-SpaceSummary | ConvertTo-Json
 ```
 ### Functions
 Use powershell Get-Help to obtain examples for the following supported commands.
-```
+```powershell
 # Orgs
 Get-OrgCredentials
 Get-Org
@@ -99,11 +98,11 @@ Publishing a spaces leverages a space definition file. The space definition file
 
 Example of definition file:
 
-```
+```powershell
 {
     "name": "my space",
     "roles": {
-        "developers": [ "user1", "user2" ], 
+        "developers": [ "user1", "user2" ],
         "managers": [ "user1" ],
         "auditors": ["user3" ]
     },
@@ -136,7 +135,7 @@ Example of definition file:
 ````
 ### Using a json the definition file
 
-```
+```powershell
 $org = Get-OrgCredentials -OrgName "myorg" -Username "myusername" -Password "mypassword" -CloudFoundryAPI https://api.cloud.pcftest.com
 $def = Get-Content -Path space-definition.json" | ConvertFrom-Json
 # publish the space
@@ -171,5 +170,3 @@ Link to LICENSE.md
 
 1. Inspiration for powershell approach taken from from [JiraPS](https://github.com/AtlassianPS/JiraPS)
 2. Terraform is the prefered approach but the leading [Terraform CloudFoundy provider](https://github.com/mevansam/terraform-provider-cf) is not mature enough to use.
-
-[![Slack](https://philips-software-slackin.now.sh/badge.svg)](https://philips-software-slackin.now.sh)
