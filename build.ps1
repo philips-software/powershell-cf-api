@@ -3,7 +3,7 @@ param($major = "0", $minor = "1", $patch = "0", $Test = $true, $Analyze = $False
 $ErrorActionPreference = "stop"
 
 if ($Test) {
-    & .\cf-api.tests.ps1
+    & "$PSScriptRoot/cf-api.tests.ps1"
 }
 
 # run unit tests
@@ -20,7 +20,7 @@ Import-Module -Name ./cf-api -Force
 $semver = "$($major).$($minor).$($patch)"
 Write-Verbose "Setting version to $($semver)"
 
-((Get-Content -path cf-api-template.nuspec -Raw) -replace '\${NUGET_VERSION}',$semver) | Set-Content -Path cf-api.nuspec
-((Get-Content -path cf-api-template.psd1 -Raw) -replace '\${NUGET_VERSION}',$semver) | Set-Content -Path cf-api.psd1
+((Get-Content -path cf-api-template.nuspec -Raw) -replace '\${NUGET_VERSION}', $semver) | Set-Content -Path cf-api.nuspec
+((Get-Content -path cf-api-template.psd1 -Raw) -replace '\${NUGET_VERSION}', $semver) | Set-Content -Path cf-api.psd1
 
 Pop-Location
