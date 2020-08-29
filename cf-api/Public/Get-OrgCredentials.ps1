@@ -43,7 +43,7 @@ function Get-OrgCredentials {
 
     begin {
         Write-Verbose "[$($MyInvocation.MyCommand.Name)] Function started"
-        Get-Token $Username $Password -CloudFoundryAPI $CloudFoundryAPI | Set-Headers
+        Get-Token $Username $Password -CloudFoundryAPI $CloudFoundryAPI -ErrorAction Stop | Set-Headers
     }
 
     process {

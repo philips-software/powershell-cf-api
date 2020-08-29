@@ -44,7 +44,6 @@ function Get-Token {
         [String]
         $Passcode,
 
-
         [Parameter( Position = 2, Mandatory)]
         [ValidateNotNullOrEmpty()]
         [String]
@@ -73,9 +72,8 @@ function Get-Token {
             Write-Output (Invoke-WebRequest -Uri $url -Method Get -Header $header)
         }
         if ($response.StatusCode -ne 200) {
-            $message = "$($url) $($response.StatusCode)"
-            Write-Error $message
-            throw $message
+            Write-Error -Message "Failed when calling '$url' with status code $($response.StatusCode)"
+            return
         }
         $url = ($response.Content | ConvertFrom-Json).authorization_endpoint + "/oauth/token"
         Set-Variable -Name oAuthTokenEndpoint -Scope Script -Value $url
@@ -90,14 +88,12 @@ function Get-Token {
             Default { throw "Uncaught ParameterSet" }
         }
 
-
         $response = Invoke-Retry -ScriptBlock {
             Write-Output (Invoke-WebRequest -Uri $url -Method Post -Header $header -Body $body)
         }
         if ($response.StatusCode -ne 200) {
-            $message = "Get-Credentials: $($url) $($response.StatusCode)"
-            Write-Error -Message $message
-            throw $message
+            Write-Error -Message "Failed when calling '$url' with status code $($response.StatusCode)"
+            return
         }
         Write-Output $response.Content | ConvertFrom-Json
     }
