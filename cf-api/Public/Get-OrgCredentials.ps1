@@ -18,6 +18,9 @@ function Get-OrgCredentials {
 
     [CmdletBinding()]
     [OutputType([psobject])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingPlainTextForPassword', '', Justification='needed to collect')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '', Justification='needed to collect')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingUsernameAndPasswordParams', '', Justification='needed to collect')]
     param(
         [Parameter( Position = 0, Mandatory)]
         [ValidateNotNullOrEmpty()]
@@ -43,7 +46,7 @@ function Get-OrgCredentials {
 
     begin {
         Write-Verbose "[$($MyInvocation.MyCommand.Name)] Function started"
-        Get-Token $Username $Password -CloudFoundryAPI $CloudFoundryAPI | Set-Headers
+        Get-Token -Username $Username -Password $Password -CloudFoundryAPI $CloudFoundryAPI | Set-Headers
     }
 
     process {

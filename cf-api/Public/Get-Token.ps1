@@ -61,18 +61,19 @@ function Get-Token {
         }
         if ($response.StatusCode -ne 200) {
             $message = "$($url) $($response.StatusCode)"
-            Write-Error $message
             throw $message
         }
         $url = ($response.Content | ConvertFrom-Json).authorization_endpoint + "/oauth/token"
         Set-Variable -Name oAuthTokenEndpoint -Scope Script -Value $url
         $body = "grant_type=password&password=$($Password)&scope=&username=$($Username)"
-        $response = Invoke-Retry -ScriptBlock {
-            Write-Output (Invoke-WebRequest -Uri $url -Method Post -Header $header -Body $body)
+        try {
+            $response = Invoke-WebRequest -Uri $url -Method Post -Header $header -Body $body
+        }
+        catch {
+            throw $_
         }
         if ($response.StatusCode -ne 200) {
-            $message = "Get-Credentials: $($url) $($response.StatusCode)"
-            Write-Error -Message $message
+            $message = "$($url) $($response.StatusCode)"
             throw $message
         }
         Write-Output $response.Content | ConvertFrom-Json
