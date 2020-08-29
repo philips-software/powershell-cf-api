@@ -5,7 +5,6 @@ BeforeAll {
     . "$PSScriptRoot\Invoke-Retry.ps1"
 }
 
-
 Describe "Get-Token" {
     BeforeAll {
         [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignment', '', Justification = 'pester supported')]
@@ -57,13 +56,13 @@ Describe "Get-Token" {
             @{ StatusCode = 400 }
         }
 
-        { Get-Token @params -ErrorAction Stop } | Should -Throw "Failed when calling 'http://cf.com/v2/info' with status code 400"
+        { Get-Token @params -ErrorAction Stop } | Should -Throw "http://cf.com/v2/info 400"
     }
     It "returns an error when no auth token can be retrieved" {
         Mock Invoke-WebRequest -ParameterFilter { $Uri -like "*/oauth/token" } -Verifiable {
             @{ StatusCode = 400; Content = '{"name":"foo"}' }
         }
 
-        { Get-Token @params -ErrorAction Stop } | Should -Throw "Failed when calling 'http://auth/oauth/token' with status code 400"
+        { Get-Token @params -ErrorAction Stop } | Should -Throw "http://auth/oauth/token 400"
     }
 }
