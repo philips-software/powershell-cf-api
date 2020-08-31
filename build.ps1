@@ -1,6 +1,11 @@
-param($major = "0", $minor = "1", $patch = "0", $Test = $true, $Analyze = $False)
+param($major = "0", $minor = "1", $patch = "0", $Test = $true, $Analyze = $true)
 
-$ErrorActionPreference = "stop"
+trap {
+    $ErrorActionPreference = "Continue";
+    Write-Error $_
+    exit 1
+}
+$ErrorActionPreference = "Stop"
 
 if ($Test) {
     & .\cf-api.tests.ps1
@@ -11,7 +16,7 @@ Push-Location $PSScriptRoot/cf-api
 
 if ($Analyze) {
     Install-Module -Name PSScriptAnalyzer -Force
-    Invoke-ScriptAnalyzer -Path Public -Recurse
+    Invoke-ScriptAnalyzer -Path Public -Recurse # -EnableExit <= add once all warnings are cleaned up
 }
 
 # ensure the module imports
@@ -24,3 +29,5 @@ Write-Verbose "Setting version to $($semver)"
 ((Get-Content -path cf-api-template.psd1 -Raw) -replace '\${NUGET_VERSION}',$semver) | Set-Content -Path cf-api.psd1
 
 Pop-Location
+
+exit 0
