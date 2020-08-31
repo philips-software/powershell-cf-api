@@ -7,7 +7,14 @@ trap {
 }
 $ErrorActionPreference = "Stop"
 Push-Location $PSScriptRoot/cf-api
-    $env:CI
+    if (-not $env:CI) {
+        if (Test-Path "cf-api.nuspec") {
+            Remove-Item "cf-api.nuspec"
+        }
+        if (Test-Path "cf-api.psd1") {
+            Remove-Item "cf-api.psd1"
+        }
+    }
     $semver = "$($major).$($minor).$($patch)"
     Write-Verbose "Setting version to $($semver)"
     ((Get-Content -path cf-api-template.nuspec -Raw) -replace '\${NUGET_VERSION}',$semver) | Set-Content -Path cf-api.nuspec
