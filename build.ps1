@@ -7,6 +7,9 @@ trap {
 }
 $ErrorActionPreference = "Stop"
 
+# ensure the module imports
+Import-Module -Name ./cf-api -Force
+
 if ($Test) {
     & .\cf-api.tests.ps1
 }
@@ -18,9 +21,6 @@ if ($Analyze) {
     Install-Module -Name PSScriptAnalyzer -Force
     Invoke-ScriptAnalyzer -Path Public -Recurse # -EnableExit <= add once all warnings are cleaned up
 }
-
-# ensure the module imports
-Import-Module -Name ./cf-api -Force
 
 $semver = "$($major).$($minor).$($patch)"
 Write-Verbose "Setting version to $($semver)"
