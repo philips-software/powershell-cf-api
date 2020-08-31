@@ -3,7 +3,7 @@ Set-StrictMode -Version Latest
 BeforeAll {
     . "$PSScriptRoot\Wait-ServiceOperations.ps1"
     . "$PSScriptRoot\Get-SpaceSummary.ps1"
-    . "$PSScriptRoot\Wait-Until.ps1"
+    . "$PSScriptRoot\..\Private\Wait-Until.ps1"
 }
 
 Describe "Wait-ServiceOperations" {
