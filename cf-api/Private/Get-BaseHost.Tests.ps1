@@ -1,9 +1,8 @@
 Set-StrictMode -Version Latest
 
-BeforeAll {
-    Remove-Module "cf-api"
-    Import-Module (Join-Path $PSScriptRoot "../cf-api.psd1")
-}
+Remove-Module "cf-api" -ErrorAction SilentlyContinue
+Import-Module (Join-Path $PSScriptRoot "../cf-api.psd1")
+
 Describe "Get-BaseHost" {
     InModuleScope "cf-api" {
         Context "Access Script Level Variables" {
