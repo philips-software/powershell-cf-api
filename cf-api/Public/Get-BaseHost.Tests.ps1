@@ -6,7 +6,7 @@ BeforeAll {
 Describe "Get-BaseHost" {
     Context "Access Script Level Variables" {
         It "throws exceptions when script level variable is not set" {
-            { Get-BaseHost } | Should -Throw "*cannot be retrieved because it has not been set*"
+            { Get-BaseHost } | Should -Throw "*baseHost is not set in script variable*"
         }
         It "is set" {
             $hostUrl = "http://localhost"
