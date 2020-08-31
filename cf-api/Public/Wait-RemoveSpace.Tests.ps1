@@ -4,7 +4,7 @@ BeforeAll {
     . "$PSScriptRoot\Wait-RemoveSpace.ps1"
     . "$PSScriptRoot\Remove-Space.ps1"
     . "$PSScriptRoot\Wait-JobStatus.ps1"
-    . "$PSScriptRoot\Wait-Until.ps1"
+    . "$PSScriptRoot\..\Private\Wait-Until.ps1"
 }
 
 Describe "Wait-RemoveSpace" {

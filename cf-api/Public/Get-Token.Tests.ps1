@@ -2,7 +2,7 @@ Set-StrictMode -Version Latest
 
 BeforeAll {
     . "$PSScriptRoot\Get-Token.ps1"
-    . "$PSScriptRoot\Invoke-Retry.ps1"
+    . "$PSScriptRoot\..\Private\Invoke-Retry.ps1"
 }
 
 Describe "Get-Token" {

@@ -2,13 +2,13 @@ Set-StrictMode -Version Latest
 
 BeforeAll {
     . "$PSScriptRoot\Set-SpaceRole.ps1"
-    . "$PSScriptRoot\Get-BaseHost.ps1"
-    . "$PSScriptRoot\Get-Header.ps1"
-    . "$PSScriptRoot\Invoke-Retry.ps1"
+    . "$PSScriptRoot\..\Private\Get-BaseHost.ps1"
+    . "$PSScriptRoot\..\Private\Get-Header.ps1"
+    . "$PSScriptRoot\..\Private\Invoke-Retry.ps1"
 }
 Describe "SetSpaceRole" {
     BeforeAll {
-        Mock Get-baseHost { "basehost" }
+        Mock Get-BaseHost { "basehost" }
         Mock Get-Header { @{} }
         Mock Invoke-Retry { & $ScriptBlock } -Verifiable
         Mock Invoke-WebRequest

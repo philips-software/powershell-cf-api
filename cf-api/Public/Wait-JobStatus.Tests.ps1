@@ -3,7 +3,7 @@ Set-StrictMode -Version Latest
 BeforeAll {
     . "$PSScriptRoot\Wait-JobStatus.ps1"
     . "$PSScriptRoot\Get-Job.ps1"
-    . "$PSScriptRoot\Wait-Until.ps1"
+    . "$PSScriptRoot\..\Private\Wait-Until.ps1"
 }
 
 Describe "Wait-JobStatus" {

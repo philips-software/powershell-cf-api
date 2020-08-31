@@ -2,9 +2,9 @@ Set-StrictMode -Version Latest
 
 BeforeAll {
     . "$PSScriptRoot\Remove-ServiceBinding.ps1"
-    . "$PSScriptRoot\Get-BaseHost.ps1"
-    . "$PSScriptRoot\Get-Header.ps1"
-    . "$PSScriptRoot\Invoke-Retry.ps1"
+    . "$PSScriptRoot\..\Private\Get-BaseHost.ps1"
+    . "$PSScriptRoot\..\Private\Get-Header.ps1"
+    . "$PSScriptRoot\..\Private\Invoke-Retry.ps1"
 }
 
 Describe "Remove-Service" {
