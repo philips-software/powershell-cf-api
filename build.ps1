@@ -24,7 +24,7 @@ Push-Location $PSScriptRoot/cf-api
 Pop-Location
 
 if ($Test) {
-    & .\cf-api.tests.ps1
+    & "$PSScriptRoot/cf-api.tests.ps1"
 }
 
 if ($Analyze) {
@@ -32,4 +32,13 @@ if ($Analyze) {
     Invoke-ScriptAnalyzer -Path $PSScriptRoot/cf-api/Public -Recurse # -EnableExit <= add once all warnings are cleaned up
 }
 
-exit 0
+# ensure the module imports
+Import-Module -Name ./cf-api -Force
+
+$semver = "$($major).$($minor).$($patch)"
+Write-Verbose "Setting version to $($semver)"
+
+((Get-Content -path cf-api-template.nuspec -Raw) -replace '\${NUGET_VERSION}', $semver) | Set-Content -Path cf-api.nuspec
+((Get-Content -path cf-api-template.psd1 -Raw) -replace '\${NUGET_VERSION}', $semver) | Set-Content -Path cf-api.psd1
+
+Pop-Location
