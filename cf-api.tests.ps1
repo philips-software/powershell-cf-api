@@ -1,7 +1,7 @@
-
+$ErrorActionPreference = "stop"
 $VerbosePreference = "silentlycontinue"
 function Install-ModuleVersion($Name, $Version) {
-    if ((Get-Module -list -Name $Name | where { $_.version -eq $Version }) -notcontains $Name) {
+    if ((Get-Module -list -Name $Name | Where-Object { $_.version -eq $Version }) -notcontains $Name) {
         Install-Module -Name $Name -SkipPublisherCheck -RequiredVersion $Version -Force
     }
 }
@@ -11,4 +11,4 @@ Install-ModuleVersion -Name "Functional" -Version "0.0.4"
 Install-ModuleVersion -Name "PesterMatchHashTable" -Version "0.3.0"
 Install-ModuleVersion -Name "PesterMatchArray" -Version "0.3.1"
 
-Invoke-Pester -ExcludeTag 'Disabled' -Path "cf-api" -OutputFile "./test-pester.xml" -OutputFormat NUnitXml
+Invoke-Pester -ExcludeTag 'Disabled' -Path "cf-api" -OutputFile "./test-pester.xml" -OutputFormat NUnitXml -EnableExit

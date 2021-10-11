@@ -9,28 +9,40 @@
     This parameter is used to identify the username to authenticate
 .PARAMETER Password
     This parameter is used to identify the username's password to authenticate
+.PARAMETER Passcode
+    Authenticate using a one time password.
+    This is common when using SSO for authentication.
+    The OTP can be retrieved at /passcode.
+    http://docs.cloudfoundry.org/api/uaa/version/74.18.0/index.html#one-time-passcode
 .PARAMETER CloudFoundryAPI
     This parameter is the cloud foundry api endpoint to use
 .EXAMPLE
-   $token = Get-Token "Wellcentive" "bjones" "SD*&@#@kdfj$"
+   $token = Get-Token "bjones" "SD*&@#@kdfj$" "https://example.com"
+.EXAMPLE
+   $token = Get-Token -Passcode "AbCDEfGH" "https://example.com"
 #>
 function Get-Token {
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = "UserAndPassword")]
     [OutputType([psobject])]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingPlainTextForPassword', '', Justification='needed to collect')]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '', Justification='needed to collect')]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingUsernameAndPasswordParams', '', Justification='needed to collect')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingPlainTextForPassword', '', Justification = 'needed to collect')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '', Justification = 'needed to collect')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingUsernameAndPasswordParams', '', Justification = 'needed to collect')]
     param(
-        [Parameter( Position = 0, Mandatory)]
+        [Parameter( Position = 0, Mandatory, ParameterSetName = "UserAndPassword")]
         [ValidateNotNullOrEmpty()]
         [String]
         $Username,
 
-        [Parameter( Position = 1, Mandatory)]
+        [Parameter( Position = 1, Mandatory, ParameterSetName = "UserAndPassword")]
         [ValidateNotNullOrEmpty()]
         [String]
         $Password,
+
+        [Parameter( Position = 0, Mandatory, ParameterSetName = "Passcode")]
+        [ValidateNotNullOrEmpty()]
+        [String]
+        $Passcode,
 
         [Parameter( Position = 2, Mandatory)]
         [ValidateNotNullOrEmpty()]
@@ -52,27 +64,38 @@ function Get-Token {
         $url = "$($CloudFoundryAPI)/v2/info"
         Write-Debug $url
         $header = @{
-            "Authorization"="Basic Y2Y6"
-            "Accept"="application/json"
-            "Content-Type"="application/x-www-form-urlencoded; charset=UTF-8"
+            "Authorization" = "Basic Y2Y6"
+            "Accept"        = "application/json"
+            "Content-Type"  = "application/x-www-form-urlencoded; charset=UTF-8"
         }
         $response = Invoke-Retry -ScriptBlock {
             Write-Output (Invoke-WebRequest -Uri $url -Method Get -Header $header)
         }
         if ($response.StatusCode -ne 200) {
             $message = "$($url) $($response.StatusCode)"
-            Write-Error $message
             throw $message
         }
         $url = ($response.Content | ConvertFrom-Json).authorization_endpoint + "/oauth/token"
         Set-Variable -Name oAuthTokenEndpoint -Scope Script -Value $url
-        $body = "grant_type=password&password=$($Password)&scope=&username=$($Username)"
-        $response = Invoke-Retry -ScriptBlock {
-            Write-Output (Invoke-WebRequest -Uri $url -Method Post -Header $header -Body $body)
+
+        switch ($PsCmdLet.ParameterSetName) {
+            "UserAndPassword" {
+                $body = "grant_type=password&password=$Password&scope=&username=$Username"; break
+            }
+            "Passcode" {
+                $body = "grant_type=password&passcode=$Passcode&token_format=jwt"; break
+            }
+            Default { throw "Uncaught ParameterSet" }
+        }
+
+        try {
+            $response = Invoke-WebRequest -Uri $url -Method Post -Header $header -Body $body
+        }
+        catch {
+            throw $_
         }
         if ($response.StatusCode -ne 200) {
-            $message = "Get-Credentials: $($url) $($response.StatusCode)"
-            Write-Error -Message $message
+            $message = "$($url) $($response.StatusCode)"
             throw $message
         }
         Write-Output $response.Content | ConvertFrom-Json
